@@ -1,11 +1,13 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.net.ServerSocket;
 
 public class ServerFrame extends JFrame {
     private JLabel ipLabel =new JLabel("                    IP:");
-    private JLabel configLabel =new JLabel("10.51.3.19");
+    private JLabel configLabel =new JLabel();
     private JLabel portLabel =new JLabel("                 port:");
-    private JTextField portField =new JTextField();
+    private JLabel portField =new JLabel("5300");
     private JButton setting =new JButton("設定");
     private JButton start =new JButton("start");
     private JPanel jpl1 =new JPanel(new GridLayout(1,6,0,0));
@@ -14,17 +16,19 @@ public class ServerFrame extends JFrame {
     private JTextField chat =new JTextField();
     private JButton send =new JButton("send");
     private Container cp;
-
+    private ServerNet sn;
 
     public ServerFrame(){
         init();
     }
     private void init(){
-        ServerNet ser =new ServerNet(ServerFrame.this);
         this.setTitle("Server");
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setVisible(true);
         this.setBounds(10,10,500,500);
+
+        sn=new ServerNet(ServerFrame.this);
+        configLabel.setText(sn.getHostIp());
 
         cp=this.getContentPane();
         cp.setLayout(new BorderLayout());
@@ -44,7 +48,26 @@ public class ServerFrame extends JFrame {
 
         jpl2.add(chat);
         jpl2.add(send);
+
+        start.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                sn.start();
+            }
+        });
+        send.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                sn.sendMsg(chat.getText());
+            }
+        });
     }
+
+    public void appendMessage(String str){
+        area.append(str);
+    }
+
+
 }
 
 

@@ -1,11 +1,12 @@
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 
 public class ClientFrame extends JFrame {
-    private JLabel ipLabel =new JLabel("                     IP:");
-
-    private JTextField configLabel =new JTextField();
-    private JLabel portLabel =new JLabel("                   port:");
+    private JLabel ipLabel =new JLabel("                    IP:");
+    private JTextField configField =new JTextField();
+    private JLabel portLabel =new JLabel("                 port:");
     private JTextField portField =new JTextField();
     private JButton setting =new JButton("設定");
     private JButton start =new JButton("start");
@@ -15,6 +16,7 @@ public class ClientFrame extends JFrame {
     private JTextField chat =new JTextField();
     private JButton send =new JButton("send");
     private Container cp;
+    private ClientNet cn;
 
 
     public ClientFrame(){
@@ -26,11 +28,13 @@ public class ClientFrame extends JFrame {
         this.setVisible(true);
         this.setBounds(10,10,500,500);
 
+        cn=new ClientNet(ClientFrame.this);
+
         cp=this.getContentPane();
         cp.setLayout(new BorderLayout());
         cp.add(jpl1,BorderLayout.NORTH);
         jpl1.add(ipLabel);
-        jpl1.add(configLabel);
+        jpl1.add(configField);
         jpl1.add(portLabel);
         jpl1.add(portField);
         jpl1.add(setting);
@@ -44,5 +48,22 @@ public class ClientFrame extends JFrame {
 
         jpl2.add(chat);
         jpl2.add(send);
+
+        start.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cn.start();
+            }
+        });
     }
+    public int getport(){
+        return Integer.parseInt(portField.getText()) ;
+    }
+    public String getip(){
+        return configField.getText();
+    }
+    public void appendMessage(String str){
+        area.append(str);
+    }
+
 }
