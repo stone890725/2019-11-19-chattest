@@ -2,6 +2,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class ClientFrame extends JFrame {
     private JLabel ipLabel =new JLabel("                    IP:");
@@ -12,6 +13,7 @@ public class ClientFrame extends JFrame {
     private JButton start =new JButton("start");
     private JPanel jpl1 =new JPanel(new GridLayout(1,6,0,0));
     private JTextArea area =new JTextArea();
+    private JScrollPane jsc =new JScrollPane(area);
     private JPanel jpl2 =new JPanel(new GridLayout(1,2,2,2));
     private JTextField chat =new JTextField();
     private JButton send =new JButton("send");
@@ -26,7 +28,7 @@ public class ClientFrame extends JFrame {
         this.setTitle("Client");
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setVisible(true);
-        this.setBounds(10,10,500,500);
+        this.setBounds(500,10,500,500);
 
         cn=new ClientNet(ClientFrame.this);
 
@@ -42,12 +44,21 @@ public class ClientFrame extends JFrame {
         area.setBackground(new Color(189, 255, 198));
         area.setEditable(false);
 
-        cp.add(area,BorderLayout.CENTER);
+        cp.add(jsc,BorderLayout.CENTER);
 
         cp.add(jpl2,BorderLayout.SOUTH);
 
         jpl2.add(chat);
         jpl2.add(send);
+
+        send.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cn.sendMsg(chat.getText());
+                ClientFrame.this.appendMessage("client:"+chat.getText());
+                chat.setText("");
+            }
+        });
 
         start.addActionListener(new AbstractAction() {
             @Override
@@ -57,13 +68,19 @@ public class ClientFrame extends JFrame {
         });
     }
     public int getport(){
-        return Integer.parseInt(portField.getText()) ;
+
+        return Integer.parseInt(portField.getText());
+
     }
     public String getip(){
+
         return configField.getText();
+
     }
     public void appendMessage(String str){
-        area.append(str);
+        area.append(str+"\n");
     }
+
+
 
 }

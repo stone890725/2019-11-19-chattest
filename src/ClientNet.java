@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -26,7 +27,7 @@ public class ClientNet extends Thread {
             cf.appendMessage("Server start,client connect");
             cf.repaint();
             socket=new Socket(cf.getip(),cf.getport());
-            cf.appendMessage("Cline accept");
+            cf.appendMessage("Server accept");
             outputStream=socket.getOutputStream();
             while (true){
                 inputStream=socket.getInputStream();
@@ -37,7 +38,7 @@ public class ClientNet extends Thread {
                     break;
                 }
                 else {
-                    cf.appendMessage("client:"+new String(data,0,n));
+                    cf.appendMessage("Server:"+new String(data,0,n));
                 }
             }
         }
@@ -48,6 +49,7 @@ public class ClientNet extends Thread {
             System.out.println(ex.toString());
         }
     }
+
     public void close(){
         try {
             inputStream.close();
@@ -56,6 +58,16 @@ public class ClientNet extends Thread {
         }
         catch (Exception e){
             System.out.println(e.toString());
+        }
+    }
+    public void sendMsg(String msg){
+        if (socket!=null){
+            try {
+                outputStream.write(msg.getBytes());
+            }
+            catch (Exception e){
+                JOptionPane.showMessageDialog(cf,e.toString(),"error",1);
+            }
         }
     }
     }

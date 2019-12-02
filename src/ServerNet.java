@@ -45,7 +45,7 @@ public class ServerNet extends Thread {
                      break;
                  }
                  else {
-                     server.appendMessage("client:"+new String(data,0,n));
+                     server.appendMessage("Cline:"+new String(data,0,n));
                  }
              }
         }

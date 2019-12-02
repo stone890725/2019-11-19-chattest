@@ -12,6 +12,7 @@ public class ServerFrame extends JFrame {
     private JButton start =new JButton("start");
     private JPanel jpl1 =new JPanel(new GridLayout(1,6,0,0));
     private JTextArea area =new JTextArea();
+    private JScrollPane jsc =new JScrollPane(area);
     private JPanel jpl2 =new JPanel(new GridLayout(1,2,2,2));
     private JTextField chat =new JTextField();
     private JButton send =new JButton("send");
@@ -40,7 +41,7 @@ public class ServerFrame extends JFrame {
         jpl1.add(setting);
         jpl1.add(start);
 
-        cp.add(area,BorderLayout.CENTER);
+        cp.add(jsc,BorderLayout.CENTER);
         area.setBackground(new Color(0, 212, 255));
         area.setEditable(false);
 
@@ -52,6 +53,7 @@ public class ServerFrame extends JFrame {
         start.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 sn.start();
             }
         });
@@ -59,12 +61,14 @@ public class ServerFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 sn.sendMsg(chat.getText());
+                ServerFrame.this.appendMessage("server:"+chat.getText());
+                chat.setText("");
             }
         });
     }
 
     public void appendMessage(String str){
-        area.append(str);
+        area.append(str+"\n");
     }
 
 
