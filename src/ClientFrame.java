@@ -3,32 +3,51 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
-public class ClientFrame extends JFrame {
-    private JLabel ipLabel =new JLabel("                    IP:");
+public class ClientFrame extends JFrame implements KeyListener {
+    private JLabel ipLabel =new JLabel("IP:");
     private JTextField configField =new JTextField();
-    private JLabel portLabel =new JLabel("                 port:");
+    private JLabel portLabel =new JLabel("port:");
     private JTextField portField =new JTextField();
     private JButton setting =new JButton("設定");
     private JButton start =new JButton("start");
+
     private JPanel jpl1 =new JPanel(new GridLayout(1,6,0,0));
     private JTextArea area =new JTextArea();
     private JScrollPane jsc =new JScrollPane(area);
+
+    private JPanel jplCenter =new JPanel(new BorderLayout());
+    private JPanel jplGame =new JPanel();
+
     private JPanel jpl2 =new JPanel(new GridLayout(1,2,2,2));
     private JTextField chat =new JTextField();
     private JButton send =new JButton("send");
+
     private Container cp;
     private ClientNet cn;
+
+    private JLabel char1=new JLabel();
+    private JLabel char2=new JLabel();
+    private ImageIcon img =new ImageIcon("huu.png");
+    private ImageIcon img2 =new ImageIcon("spider.png");
 
 
     public ClientFrame(){
         init();
     }
     private void init(){
+        addKeyListener(this);
+        setFocusable(true);
+        setFocusTraversalKeysEnabled(true);
+
         this.setTitle("Client");
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.setVisible(true);
-        this.setBounds(500,10,500,500);
+        this.setBounds(10,610,700,600);
+
+        ipLabel.setHorizontalAlignment(JLabel.RIGHT);
+        portLabel.setHorizontalAlignment(JLabel.RIGHT);
 
         cn=new ClientNet(ClientFrame.this);
 
@@ -44,10 +63,32 @@ public class ClientFrame extends JFrame {
         area.setBackground(new Color(189, 255, 198));
         area.setEditable(false);
 
-        cp.add(jsc,BorderLayout.CENTER);
+        cp.add(jplCenter,BorderLayout.CENTER);
+        jplGame.setBackground(new Color(100,210,30));
+        jplCenter.add(jplGame,BorderLayout.CENTER);
+
+        jsc.setPreferredSize(new Dimension(150,500));
+        jplCenter.add(jsc,BorderLayout.EAST);
+
+
+        Image reImg=img.getImage();
+        Image reImg2=reImg.getScaledInstance(80,100,Image.SCALE_SMOOTH);
+        img.setImage(reImg2);
+
+        char1.setIcon(img);
+        char1.setBounds(50,60,80,100);
+
+        reImg=img2.getImage();
+        reImg2=reImg.getScaledInstance(180,200,Image.SCALE_SMOOTH);
+        img2.setImage(reImg2);
+
+        char2.setIcon(img2);
+        char2.setBounds(180,60,180,200);
+
+        jplGame.add(char1);
+        jplGame.add(char2);
 
         cp.add(jpl2,BorderLayout.SOUTH);
-
         jpl2.add(chat);
         jpl2.add(send);
 
@@ -67,6 +108,32 @@ public class ClientFrame extends JFrame {
             }
         });
     }
+
+    public void keyPressed(KeyEvent ke){
+        System.out.println(ke.getKeyCode());
+        switch (ke.getKeyCode()){
+            case 39://右
+                char1.setLocation(char1.getX()+5,char1.getY());
+                break;
+            case 38://上
+                char1.setLocation(char1.getX(),char1.getY()-5);
+                break;
+            case 37://左
+                char1.setLocation(char1.getX()-5,char1.getY());
+                break;
+            case 40://下
+                char1.setLocation(char1.getX(),char1.getY()+5);
+                break;
+        }
+
+    }
+    public void keyTyped(KeyEvent ke) {
+
+    }
+    public void keyReleased(KeyEvent e) {
+
+    }
+
     public int getport(){
 
         return Integer.parseInt(portField.getText());

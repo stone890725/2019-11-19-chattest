@@ -56,6 +56,7 @@ public class ServerNet extends Thread {
             System.out.println(ex.toString());
         }
     }
+
     public void sendMsg(String msg){
         if (socket!=null){
             try {
