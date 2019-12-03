@@ -34,7 +34,8 @@ public class ServerFrame extends JFrame implements KeyListener {
     public void init(){
         addKeyListener(this);
         setFocusable(true);
-        setFocusTraversalKeysEnabled(true);
+        setFocusTraversalKeysEnabled(false);
+
         this.setTitle("Server");
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setBounds(10,10,700,600);
@@ -89,7 +90,6 @@ public class ServerFrame extends JFrame implements KeyListener {
         start.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
                 sn.start();
             }
         });
@@ -105,8 +105,15 @@ public class ServerFrame extends JFrame implements KeyListener {
 
 
     public void appendMessage(String str){
-
+        if (str.contains("#R1")){
+            String data[] =str.split(",");
+            int r1x =Integer.parseInt(data[1]);
+            int r1y =Integer.parseInt(data[2]);
+            char1.setLocation(r1x,r1y);
+        }
+        else {
         area.append(str+"\n");
+        }
     }
     public void keyPressed(KeyEvent ke){
         System.out.println(ke.getKeyCode());
@@ -123,6 +130,9 @@ public class ServerFrame extends JFrame implements KeyListener {
             case 40://下
                 char2.setLocation(char2.getX(),char2.getY()+5);
                 break;
+        }
+        if (ke.getKeyCode()>=37 && ke.getKeyCode()<=40 &&sn!=null){
+            sn.sendMsg("#R2,"+Integer.toString(char2.getX())+","+Integer.toString(char2.getY()));
         }
 
     }

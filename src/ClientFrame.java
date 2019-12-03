@@ -40,7 +40,7 @@ public class ClientFrame extends JFrame implements KeyListener {
     private void init(){
         addKeyListener(this);
         setFocusable(true);
-        setFocusTraversalKeysEnabled(true);
+        setFocusTraversalKeysEnabled(false);
 
         this.setTitle("Client");
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -124,6 +124,8 @@ public class ClientFrame extends JFrame implements KeyListener {
             case 40://下
                 char1.setLocation(char1.getX(),char1.getY()+5);
                 break;
+        } if (ke.getKeyCode()>=37 && ke.getKeyCode()<=40 &&cn!=null){
+            cn.sendMsg("#R1,"+Integer.toString(char1.getX())+","+Integer.toString(char1.getY()));
         }
 
     }
@@ -145,7 +147,15 @@ public class ClientFrame extends JFrame implements KeyListener {
 
     }
     public void appendMessage(String str){
-        area.append(str+"\n");
+        if (str.contains("#R2")){
+            String data[] =str.split(",");
+            int r1x =Integer.parseInt(data[1]);
+            int r1y =Integer.parseInt(data[2]);
+            char2.setLocation(r1x,r1y);
+        }
+        else {
+            area.append(str+"\n");
+        }
     }
 
 
